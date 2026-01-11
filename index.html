@@ -8,35 +8,36 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
+/* =========================
+   GLOBAL / BLACK FIX
+========================= */
 :root {
     --primary: #4A90E2;
-    --glass: rgba(25,25,25,.55);
-    --border: rgba(255,255,255,.08);
+    --glass: rgba(20,20,20,.7);
+    --border: rgba(255,255,255,.06);
     --text: #EAEAEA;
-    --muted: #A0A0A0;
+    --muted: #9A9A9A;
     --radius: 22px;
 }
 
-/* FIX BORDURES BLANCHES */
 html, body {
     width: 100%;
     height: 100%;
     margin: 0;
     padding: 0;
-    background: radial-gradient(circle at top, #101010, #050505);
-    overflow-x: hidden;
-}
-
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+    background-color: #000000;
+    overscroll-behavior: none;
 }
 
 body {
     font-family: Inter, sans-serif;
     color: var(--text);
     line-height: 1.6;
+    -webkit-overflow-scrolling: touch;
+}
+
+* {
+    box-sizing: border-box;
 }
 
 a {
@@ -44,14 +45,18 @@ a {
     text-decoration: none;
 }
 
-/* Layout */
+/* =========================
+   LAYOUT
+========================= */
 .container {
     max-width: 1100px;
-    margin: auto;
+    margin: 0 auto;
     padding: 50px 20px;
 }
 
-/* Header */
+/* =========================
+   HEADER
+========================= */
 header {
     text-align: center;
     margin-bottom: 70px;
@@ -67,7 +72,9 @@ header p {
     font-size: 1.1em;
 }
 
-/* Sections */
+/* =========================
+   SECTIONS
+========================= */
 section {
     margin-bottom: 80px;
 }
@@ -79,7 +86,9 @@ h2 {
     padding-bottom: 12px;
 }
 
-/* Add Source */
+/* =========================
+   ADD SOURCE
+========================= */
 .add-source ol {
     margin-left: 22px;
 }
@@ -91,15 +100,15 @@ h2 {
 .add-source pre {
     margin-top: 12px;
     padding: 16px;
-    background: rgba(0,0,0,.45);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: #0B0B0B;
     border: 1px solid var(--border);
     border-radius: 16px;
     overflow-x: auto;
 }
 
-/* App Card */
+/* =========================
+   APP CARD
+========================= */
 .app-card {
     background: var(--glass);
     backdrop-filter: blur(18px) saturate(140%);
@@ -107,16 +116,18 @@ h2 {
     border: 1px solid var(--border);
     border-radius: var(--radius);
     padding: 26px;
-    box-shadow: 0 20px 40px rgba(0,0,0,.6);
+    box-shadow: 0 20px 40px rgba(0,0,0,.8);
     transition: transform .35s ease, box-shadow .35s ease;
 }
 
 .app-card:hover {
-    transform: translateY(-6px) scale(1.01);
-    box-shadow: 0 30px 60px rgba(0,0,0,.8);
+    transform: translateY(-6px);
+    box-shadow: 0 30px 60px rgba(0,0,0,.9);
 }
 
-/* App header */
+/* =========================
+   APP HEADER
+========================= */
 .app-header {
     display: flex;
     gap: 20px;
@@ -129,10 +140,10 @@ h2 {
     height: 78px;
     border-radius: 22px;
     flex-shrink: 0;
-    box-shadow: 0 10px 30px rgba(0,0,0,.6);
+    box-shadow: 0 10px 30px rgba(0,0,0,.7);
 }
 
-/* App info */
+/* Info */
 .app-info h3 {
     font-size: 1.5em;
     margin-bottom: 6px;
@@ -153,7 +164,9 @@ h2 {
     margin-bottom: 4px;
 }
 
-/* Screenshots */
+/* =========================
+   SCREENSHOTS
+========================= */
 .screenshots {
     display: flex;
     gap: 14px;
@@ -174,7 +187,7 @@ h2 {
 .screenshots img {
     height: 240px;
     border-radius: 18px;
-    box-shadow: 0 15px 40px rgba(0,0,0,.7);
+    box-shadow: 0 15px 40px rgba(0,0,0,.8);
     transition: transform .25s ease;
 }
 
@@ -182,7 +195,9 @@ h2 {
     transform: scale(1.06);
 }
 
-/* Button */
+/* =========================
+   BUTTON
+========================= */
 .altstore-btn {
     display: inline-block;
     margin-top: 14px;
@@ -201,7 +216,9 @@ h2 {
     box-shadow: 0 15px 40px rgba(74,144,226,.6);
 }
 
-/* Notes */
+/* =========================
+   NOTES
+========================= */
 .notes ul {
     margin-left: 22px;
 }
@@ -210,7 +227,9 @@ h2 {
     margin-bottom: 10px;
 }
 
-/* Footer */
+/* =========================
+   FOOTER
+========================= */
 footer {
     text-align: center;
     color: var(--muted);
@@ -218,7 +237,9 @@ footer {
     margin-top: 80px;
 }
 
-/* Mobile */
+/* =========================
+   MOBILE
+========================= */
 @media (max-width: 600px) {
     .app-header {
         flex-direction: column;
