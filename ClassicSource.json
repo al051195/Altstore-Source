@@ -20,7 +20,11 @@
       "screenshots": [
         "https://raw.githubusercontent.com/al051195/SkyWizard-SwiftUI-Liquid-Glass/master/banners/iphone1.png",
         "https://raw.githubusercontent.com/al051195/SkyWizard-SwiftUI-Liquid-Glass/master/banners/iphone2.png",
-        "https://raw.githubusercontent.com/al051195/SkyWizard-SwiftUI-Liquid-Glass/master/banners/iphone3.png"
+        "https://raw.githubusercontent.com/al051195/SkyWizard-SwiftUI-Liquid-Glass/master/banners/iphone3.png",
+        "https://raw.githubusercontent.com/al051195/SkyWizard-SwiftUI-Liquid-Glass/master/banners/iphone4.png",
+        "https://raw.githubusercontent.com/al051195/SkyWizard-SwiftUI-Liquid-Glass/master/banners/iphone5.png",
+        "https://raw.githubusercontent.com/al051195/SkyWizard-SwiftUI-Liquid-Glass/master/banners/iphone6.png",
+        "https://raw.githubusercontent.com/al051195/SkyWizard-SwiftUI-Liquid-Glass/master/banners/iphone7.png"
       ],
       "versions": [
         {
@@ -29,7 +33,7 @@
           "size": 50000000,
           "downloadURL": "https://github.com/al051195/SkyWizard-SwiftUI-Liquid-Glass/releases/download/v2.2/SkyWizard-v2.2-Release.ipa",
           "localizedDescription": "New features and bug fixes.",
-          "minOSVersion": "17.0"
+          "minOSVersion": "26.0"
         }
       ],
       "appPermissions": {
