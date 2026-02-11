@@ -3,327 +3,744 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AL051195 AltStore Source</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<title>AL051195 · AltStore</title>
 
 <style>
 /* =========================
-   GLOBAL / BLACK FIX
+   NDOT-47 FONT IMPORT
+========================= */
+@font-face {
+    font-family: 'NDot-47';
+    src: url('ndot-47.woff2') format('woff2'),
+         url('ndot-47.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* =========================
+   NOTHING OS VARIABLES
 ========================= */
 :root {
-    --primary: #4A90E2;
-    --glass: rgba(20,20,20,.7);
-    --border: rgba(255,255,255,.06);
-    --text: #EAEAEA;
-    --muted: #9A9A9A;
-    --radius: 22px;
+    --nos-bg: #000000;
+    --nos-surface: #0D0D0D;
+    --nos-widget: #1A1A1A;
+    --nos-border: #2A2A2A;
+    --nos-text: #FFFFFF;
+    --nos-text-dim: #666666;
+    --nos-text-subtle: #404040;
+    --nos-red: #FF3B30;
+    --nos-dot: rgba(255, 255, 255, 0.06);
+    
+    --radius-widget: 28px;
+    --radius-small: 18px;
+    --gap: 8px;
 }
 
-html, body {
-    width: 100%;
-    height: 100%;
+/* =========================
+   RESET
+========================= */
+* {
     margin: 0;
     padding: 0;
-    background-color: #000000;
-    overscroll-behavior: none;
-}
-
-body {
-    font-family: Inter, sans-serif;
-    color: var(--text);
-    line-height: 1.6;
-    -webkit-overflow-scrolling: touch;
-}
-
-* {
     box-sizing: border-box;
 }
 
-a {
-    color: var(--primary);
-    text-decoration: none;
+html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+    background: var(--nos-bg);
+    color: var(--nos-text);
+    line-height: 1.5;
+    overflow-x: hidden;
+}
+
+/* DOT MATRIX BACKGROUND */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(circle, var(--nos-dot) 1px, transparent 1px);
+    background-size: 20px 20px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* =========================
+   NDOT TYPOGRAPHY
+========================= */
+.ndot {
+    font-family: 'NDot-47', monospace;
+    font-weight: normal;
+    letter-spacing: 0.05em;
 }
 
 /* =========================
    LAYOUT
 ========================= */
 .container {
-    max-width: 1100px;
+    max-width: 1200px;
     margin: 0 auto;
-    padding: 50px 20px;
+    padding: 40px 20px;
+    position: relative;
+    z-index: 1;
 }
 
 /* =========================
-   HEADER
+   WIDGET GRID SYSTEM
 ========================= */
-header {
+.widget-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--gap);
+    margin-bottom: var(--gap);
+}
+
+.widget {
+    background: var(--nos-widget);
+    border: 1px solid var(--nos-border);
+    border-radius: var(--radius-widget);
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(40px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.widget:hover {
+    background: rgba(26, 26, 26, 0.8);
+    border-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+.widget-header {
+    font-family: 'NDot-47', monospace;
+    font-size: 0.75rem;
+    color: var(--nos-text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 12px;
+}
+
+.widget-title {
+    font-family: 'NDot-47', monospace;
+    font-size: 1.8rem;
+    color: var(--nos-text);
+    line-height: 1;
+    margin-bottom: 8px;
+}
+
+.widget-subtitle {
+    font-size: 0.9rem;
+    color: var(--nos-text-dim);
+    font-weight: 400;
+}
+
+/* Widget sizes */
+.w-1 { grid-column: span 1; }
+.w-2 { grid-column: span 2; }
+.w-3 { grid-column: span 3; }
+.w-4 { grid-column: span 4; }
+
+.h-1 { min-height: 140px; }
+.h-2 { min-height: 288px; }
+.h-3 { min-height: 436px; }
+
+/* =========================
+   HERO WIDGET
+========================= */
+.hero-widget {
+    background: var(--nos-surface);
+    border: 1px solid var(--nos-border);
+    border-radius: var(--radius-widget);
+    padding: 60px 40px;
     text-align: center;
-    margin-bottom: 70px;
+    margin-bottom: var(--gap);
+    position: relative;
+    overflow: hidden;
 }
 
-header h1 {
-    font-size: 2.8em;
+.hero-widget::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(
+        circle at 50% 50%,
+        rgba(255, 59, 48, 0.05) 0%,
+        transparent 60%
+    );
+    pointer-events: none;
 }
 
-header p {
-    color: var(--muted);
-    margin-top: 12px;
-    font-size: 1.1em;
+.hero-title {
+    font-family: 'NDot-47', monospace;
+    font-size: clamp(2.5rem, 8vw, 5rem);
+    color: var(--nos-text);
+    line-height: 1.1;
+    margin-bottom: 16px;
+    letter-spacing: 0.05em;
+}
+
+.hero-subtitle {
+    font-size: 1rem;
+    color: var(--nos-text-dim);
+    font-weight: 400;
 }
 
 /* =========================
-   SECTIONS
+   INSTALLATION WIDGET
 ========================= */
-section {
-    margin-bottom: 80px;
+.install-widget {
+    background: var(--nos-widget);
+    border: 1px solid var(--nos-border);
+    border-radius: var(--radius-widget);
+    padding: 0;
+    overflow: hidden;
 }
 
-h2 {
-    font-size: 1.9em;
-    margin-bottom: 24px;
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 12px;
+.install-header {
+    padding: 24px;
+    border-bottom: 1px solid var(--nos-border);
 }
 
-/* =========================
-   ADD SOURCE
-========================= */
-.add-source ol {
-    margin-left: 22px;
+.install-steps {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--nos-border);
 }
 
-.add-source li {
-    margin-bottom: 10px;
+.install-step {
+    background: var(--nos-surface);
+    padding: 24px;
+    position: relative;
+    transition: background 0.3s ease;
 }
 
-.add-source pre {
-    margin-top: 12px;
+.install-step:hover {
+    background: var(--nos-widget);
+}
+
+.step-number {
+    font-family: 'NDot-47', monospace;
+    font-size: 2.5rem;
+    color: rgba(255, 255, 255, 0.05);
+    position: absolute;
+    top: 16px;
+    right: 16px;
+}
+
+.step-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.step-desc {
+    font-size: 0.8rem;
+    color: var(--nos-text-dim);
+    line-height: 1.6;
+}
+
+.url-section {
+    background: var(--nos-surface);
+    padding: 24px;
+    border-top: 2px solid var(--nos-red);
+}
+
+.url-label {
+    font-family: 'NDot-47', monospace;
+    font-size: 0.7rem;
+    color: var(--nos-red);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 12px;
+    display: block;
+}
+
+.url-code {
+    font-family: 'NDot-47', monospace;
+    font-size: 0.9rem;
+    color: var(--nos-text);
+    background: rgba(255, 255, 255, 0.03);
     padding: 16px;
-    background: #0B0B0B;
-    border: 1px solid var(--border);
-    border-radius: 16px;
+    border-radius: var(--radius-small);
+    border: 1px solid var(--nos-border);
+    user-select: all;
     overflow-x: auto;
+    white-space: nowrap;
 }
 
 /* =========================
-   APP CARD
+   APP CARD WIDGET
 ========================= */
-.app-card {
-    background: var(--glass);
-    backdrop-filter: blur(18px) saturate(140%);
-    -webkit-backdrop-filter: blur(18px) saturate(140%);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 26px;
-    box-shadow: 0 20px 40px rgba(0,0,0,.8);
-    transition: transform .35s ease, box-shadow .35s ease;
+.app-widget {
+    background: var(--nos-widget);
+    border: 1px solid var(--nos-border);
+    border-radius: var(--radius-widget);
+    overflow: hidden;
 }
 
-.app-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 30px 60px rgba(0,0,0,.9);
-}
-
-/* =========================
-   APP HEADER
-========================= */
-.app-header {
+.app-header-section {
+    padding: 32px;
+    border-bottom: 1px solid var(--nos-border);
     display: flex;
-    gap: 20px;
+    gap: 24px;
     align-items: flex-start;
 }
 
-/* Icon */
-.app-icon {
-    width: 78px;
-    height: 78px;
-    border-radius: 22px;
+.app-icon-wrapper {
     flex-shrink: 0;
-    box-shadow: 0 10px 30px rgba(0,0,0,.7);
+    width: 80px;
+    height: 80px;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid var(--nos-border);
+    background: var(--nos-surface);
 }
 
-/* Info */
-.app-info h3 {
-    font-size: 1.5em;
-    margin-bottom: 6px;
+.app-icon-wrapper img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
 }
 
-.app-info p {
-    color: var(--muted);
-    font-size: .96em;
-    margin-bottom: 10px;
+.app-info {
+    flex: 1;
 }
 
-.app-info ul {
-    list-style: none;
-    font-size: .9em;
+.app-name {
+    font-family: 'NDot-47', monospace;
+    font-size: 1.6rem;
+    margin-bottom: 8px;
+    letter-spacing: 0.02em;
 }
 
-.app-info li {
-    margin-bottom: 4px;
+.app-desc {
+    font-size: 0.9rem;
+    color: var(--nos-text-dim);
+    margin-bottom: 16px;
+    line-height: 1.6;
 }
 
-/* =========================
-   SCREENSHOTS
-========================= */
-.screenshots {
+.app-meta {
     display: flex;
-    gap: 14px;
+    gap: 24px;
+}
+
+.meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.meta-label {
+    font-size: 0.7rem;
+    color: var(--nos-text-subtle);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.meta-value {
+    font-family: 'NDot-47', monospace;
+    font-size: 0.95rem;
+    color: var(--nos-text);
+}
+
+/* =========================
+   SCREENSHOT GALLERY
+========================= */
+.screenshot-section {
+    padding: 0;
+    background: var(--nos-surface);
+}
+
+.screenshot-scroll {
+    display: flex;
+    gap: 8px;
+    padding: 24px;
     overflow-x: auto;
-    margin-top: 20px;
-    padding-bottom: 10px;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
 }
 
-.screenshots::-webkit-scrollbar {
-    height: 6px;
+.screenshot-scroll::-webkit-scrollbar {
+    display: none;
 }
 
-.screenshots::-webkit-scrollbar-thumb {
-    background: rgba(255,255,255,.15);
-    border-radius: 10px;
+.screenshot-item {
+    flex-shrink: 0;
+    position: relative;
 }
 
-.screenshots img {
-    height: 240px;
-    border-radius: 18px;
-    box-shadow: 0 15px 40px rgba(0,0,0,.8);
-    transition: transform .25s ease;
+.screenshot-item img {
+    height: 400px;
+    width: auto;
+    display: block;
+    border-radius: 16px;
+    border: 1px solid var(--nos-border);
 }
 
-.screenshots img:hover {
-    transform: scale(1.06);
+.screenshot-badge {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: var(--nos-red);
+    color: #000;
+    font-family: 'NDot-47', monospace;
+    font-size: 0.65rem;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-weight: bold;
 }
 
 /* =========================
-   BUTTON
+   INFO WIDGETS
 ========================= */
-.altstore-btn {
-    display: inline-block;
-    margin-top: 14px;
-    padding: 12px 22px;
-    background: linear-gradient(135deg, #4A90E2, #357ABD);
-    color: white;
-    border-radius: 14px;
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--gap);
+    margin-bottom: var(--gap);
+}
+
+.info-widget {
+    background: var(--nos-widget);
+    border: 1px solid var(--nos-border);
+    border-radius: var(--radius-widget);
+    padding: 24px;
+    min-height: 160px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: all 0.3s ease;
+}
+
+.info-widget:hover {
+    background: rgba(26, 26, 26, 0.8);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.info-icon {
+    font-size: 1.5rem;
+    margin-bottom: 16px;
+}
+
+.info-title {
+    font-size: 0.85rem;
     font-weight: 600;
-    font-size: .95em;
-    box-shadow: 0 10px 30px rgba(74,144,226,.4);
-    transition: transform .2s ease, box-shadow .2s ease;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
-.altstore-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 15px 40px rgba(74,144,226,.6);
+.info-text {
+    font-size: 0.8rem;
+    color: var(--nos-text-dim);
+    line-height: 1.6;
+}
+
+.info-text code {
+    font-family: 'NDot-47', monospace;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    color: var(--nos-red);
 }
 
 /* =========================
-   NOTES
+   CONTACT WIDGET
 ========================= */
-.notes ul {
-    margin-left: 22px;
+.contact-widget {
+    background: var(--nos-widget);
+    border: 1px solid var(--nos-border);
+    border-radius: var(--radius-widget);
+    padding: 40px;
+    text-align: center;
 }
 
-.notes li {
-    margin-bottom: 10px;
+.contact-title {
+    font-family: 'NDot-47', monospace;
+    font-size: 2rem;
+    margin-bottom: 24px;
+    letter-spacing: 0.05em;
+}
+
+.contact-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 32px;
+    background: var(--nos-surface);
+    border: 1px solid var(--nos-border);
+    border-radius: 100px;
+    color: var(--nos-text);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: all 0.3s ease;
+}
+
+.contact-button:hover {
+    background: var(--nos-red);
+    border-color: var(--nos-red);
+    color: #000;
+    transform: translateY(-2px);
 }
 
 /* =========================
    FOOTER
 ========================= */
-footer {
+.footer {
     text-align: center;
-    color: var(--muted);
-    font-size: .85em;
-    margin-top: 80px;
+    padding: 40px 20px;
+    font-family: 'NDot-47', monospace;
+    font-size: 0.7rem;
+    color: var(--nos-text-subtle);
+    letter-spacing: 0.1em;
+}
+
+.footer-dots {
+    margin-bottom: 16px;
+    font-size: 1rem;
+    opacity: 0.2;
 }
 
 /* =========================
-   MOBILE
+   RESPONSIVE
 ========================= */
-@media (max-width: 600px) {
-    .app-header {
+@media (max-width: 1024px) {
+    .widget-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .w-3, .w-4 {
+        grid-column: span 2;
+    }
+    
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 20px 16px;
+    }
+    
+    .widget-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .w-1, .w-2, .w-3, .w-4 {
+        grid-column: span 1;
+    }
+    
+    .install-steps {
+        grid-template-columns: 1fr;
+    }
+    
+    .app-header-section {
         flex-direction: column;
     }
+    
+    .screenshot-item img {
+        height: 300px;
+    }
+    
+    .hero-widget {
+        padding: 40px 24px;
+    }
+}
 
-    .screenshots img {
-        height: 170px;
+/* =========================
+   ACCESSIBILITY
+========================= */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
     }
 }
 </style>
 </head>
 
 <body>
+
 <div class="container">
 
-<header>
-    <h1>📱 AL051195 AltStore Source</h1>
-    <p>Official repository of my iOS apps available through AltStore</p>
-</header>
+    <!-- HERO WIDGET -->
+    <div class="hero-widget">
+        <h1 class="hero-title ndot">AL051195<br>ALTSTORE</h1>
+        <p class="hero-subtitle">iOS Application Repository</p>
+    </div>
 
-<section class="add-source">
-<h2>🚀 Add this source to AltStore</h2>
-<ol>
-    <li>Open <strong>AltStore</strong> on your iPhone</li>
-    <li>Go to the <strong>Sources</strong> tab</li>
-    <li>Tap <strong>＋</strong></li>
-    <li>Paste the following URL:</li>
-</ol>
-<pre>https://al051195.github.io/altstore/ClassicSource.json</pre>
-    <p>✅ The source will be added automatically.</p>
-</section>
-
-<section>
-<h2>📦 Available Apps</h2>
-
-<div class="app-card">
-
-    <div class="app-header">
-        <img class="app-icon"
-             src="https://raw.githubusercontent.com/al051195/SkyWizard-SwiftUI-Liquid-Glass/master/SkyWizard-SwiftUI/Other/Assets.xcassets/Weather-Preview.imageset/Weather-iOS-Default-1024x1024@1x.png"
-             alt="SkyWizard icon">
-
-        <div class="app-info">
-            <h3>🌤 SkyWizard</h3>
-            <p>A modern and elegant weather app built with Liquid Glass in mind.</p>
-
-            <ul>
-                <li><strong>Minimum iOS version:</strong> 26</li>
-                <li><strong>Latest version:</strong> 2.2</li>
-            </ul>
+    <!-- INSTALLATION WIDGET -->
+    <div class="install-widget">
+        <div class="install-header">
+            <div class="widget-header">Setup</div>
+            <h2 class="widget-title ndot">Installation</h2>
+            <p class="widget-subtitle">Add source to AltStore</p>
+        </div>
+        
+        <div class="install-steps">
+            <div class="install-step">
+                <div class="step-number ndot">01</div>
+                <h3 class="step-title">Launch AltStore</h3>
+                <p class="step-desc">Open AltStore on your device</p>
+            </div>
+            
+            <div class="install-step">
+                <div class="step-number ndot">02</div>
+                <h3 class="step-title">Navigate Sources</h3>
+                <p class="step-desc">Access the Sources tab</p>
+            </div>
+            
+            <div class="install-step">
+                <div class="step-number ndot">03</div>
+                <h3 class="step-title">Add Source</h3>
+                <p class="step-desc">Tap the + button</p>
+            </div>
+            
+            <div class="install-step">
+                <div class="step-number ndot">04</div>
+                <h3 class="step-title">Input URL</h3>
+                <p class="step-desc">Paste repository URL</p>
+            </div>
+        </div>
+        
+        <div class="url-section">
+            <span class="url-label ndot">Repository URL</span>
+            <div class="url-code ndot">https://al051195.github.io/altstore/ClassicSource.json</div>
         </div>
     </div>
 
-    <div class="screenshots">
-        <img src="https://raw.githubusercontent.com/al051195/SkyWizard-SwiftUI-Liquid-Glass/refs/heads/master/banners/iphone1.png">
-        <img src="https://raw.githubusercontent.com/al051195/SkyWizard-SwiftUI-Liquid-Glass/refs/heads/master/banners/iphone2.png">
-        <img src="https://raw.githubusercontent.com/al051195/SkyWizard-SwiftUI-Liquid-Glass/refs/heads/master/banners/iphone3.png">
-        <img src="https://raw.githubusercontent.com/al051195/SkyWizard-SwiftUI-Liquid-Glass/refs/heads/master/banners/iphone4.png">
-        <img src="https://raw.githubusercontent.com/al051195/SkyWizard-SwiftUI-Liquid-Glass/refs/heads/master/banners/iphone5.png">
-        <img src="https://raw.githubusercontent.com/al051195/SkyWizard-SwiftUI-Liquid-Glass/refs/heads/master/banners/iphone6.png">
-        <img src="https://raw.githubusercontent.com/al051195/SkyWizard-SwiftUI-Liquid-Glass/refs/heads/master/banners/iphone7.png">
+    <!-- APP WIDGET -->
+    <div class="app-widget">
+        <div class="app-header-section">
+            <div class="app-icon-wrapper">
+                <img src="https://raw.githubusercontent.com/al051195/SkyWizard-SwiftUI-Liquid-Glass/master/SkyWizard-SwiftUI/Other/Assets.xcassets/Weather-Preview.imageset/Weather-iOS-Default-1024x1024@1x.png"
+                     alt="SkyWizard">
+            </div>
+            
+            <div class="app-info">
+                <h3 class="app-name ndot">SKYWIZARD</h3>
+                <p class="app-desc">Modern weather application featuring Liquid Glass design language with real-time meteorological data.</p>
+                
+                <div class="app-meta">
+                    <div class="meta-item">
+                        <span class="meta-label">Version</span>
+                        <span class="meta-value ndot">2.2</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Min iOS</span>
+                        <span class="meta-value ndot">26.0</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Status</span>
+                        <span class="meta-value ndot">ACTIVE</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="screenshot-section">
+            <div class="screenshot-scroll">
+                <div class="screenshot-item">
+                    <div class="screenshot-badge ndot">01</div>
+                    <img src="https://raw.githubusercontent.com/al051195/SkyWizard-SwiftUI-Liquid-Glass/refs/heads/master/banners/iphone1.png" alt="Screenshot 1">
+                </div>
+                <div class="screenshot-item">
+                    <div class="screenshot-badge ndot">02</div>
+                    <img src="https://raw.githubusercontent.com/al051195/SkyWizard-SwiftUI-Liquid-Glass/refs/heads/master/banners/iphone2.png" alt="Screenshot 2">
+                </div>
+                <div class="screenshot-item">
+                    <div class="screenshot-badge ndot">03</div>
+                    <img src="https://raw.githubusercontent.com/al051195/SkyWizard-SwiftUI-Liquid-Glass/refs/heads/master/banners/iphone3.png" alt="Screenshot 3">
+                </div>
+                <div class="screenshot-item">
+                    <div class="screenshot-badge ndot">04</div>
+                    <img src="https://raw.githubusercontent.com/al051195/SkyWizard-SwiftUI-Liquid-Glass/refs/heads/master/banners/iphone4.png" alt="Screenshot 4">
+                </div>
+                <div class="screenshot-item">
+                    <div class="screenshot-badge ndot">05</div>
+                    <img src="https://raw.githubusercontent.com/al051195/SkyWizard-SwiftUI-Liquid-Glass/refs/heads/master/banners/iphone5.png" alt="Screenshot 5">
+                </div>
+                <div class="screenshot-item">
+                    <div class="screenshot-badge ndot">06</div>
+                    <img src="https://raw.githubusercontent.com/al051195/SkyWizard-SwiftUI-Liquid-Glass/refs/heads/master/banners/iphone6.png" alt="Screenshot 6">
+                </div>
+                <div class="screenshot-item">
+                    <div class="screenshot-badge ndot">07</div>
+                    <img src="https://raw.githubusercontent.com/al051195/SkyWizard-SwiftUI-Liquid-Glass/refs/heads/master/banners/iphone7.png" alt="Screenshot 7">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- INFO GRID -->
+    <div class="info-grid">
+        <div class="info-widget">
+            <div>
+                <div class="info-icon">⚡</div>
+                <h3 class="info-title">GitHub Pages</h3>
+                <p class="info-text">All resources in <code>ClassicSource.json</code> hosted via GitHub Pages.</p>
+            </div>
+        </div>
+        
+        <div class="info-widget">
+            <div>
+                <div class="info-icon">🔄</div>
+                <h3 class="info-title">Auto Updates</h3>
+                <p class="info-text">Updates and changes propagate automatically to all users.</p>
+            </div>
+        </div>
+        
+        <div class="info-widget">
+            <div>
+                <div class="info-icon">🔒</div>
+                <h3 class="info-title">Open Source</h3>
+                <p class="info-text">Source code available on GitHub. Contributions welcome.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTACT WIDGET -->
+    <div class="contact-widget">
+        <h2 class="contact-title ndot">GET IN TOUCH</h2>
+        <a href="https://github.com/al051195" target="_blank" class="contact-button">
+            <span>View on GitHub</span>
+            <span>→</span>
+        </a>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+        <div class="footer-dots ndot">◯ ◯ ◯</div>
+        <p class="ndot">© 2026 AL051195 · ALTSTORE</p>
     </div>
 
 </div>
-</section>
 
-<section class="notes">
-<h2>⚡ Notes</h2>
-<ul>
-    <li>All URLs in <code>ClassicSource.json</code> point to files hosted via <strong>GitHub Pages</strong>.</li>
-    <li>Updates to apps or screenshots will automatically reflect for anyone using the source.</li>
-</ul>
-</section>
-
-<section>
-<h2>📝 Contact</h2>
-<p>For feedback or questions, visit my GitHub profile:
-<a href="https://github.com/al051195" target="_blank">AL051195</a></p>
-</section>
-
-<footer>
-© 2026 AL051195 — AltStore Source
-</footer>
-
-</div>
 </body>
 </html>
