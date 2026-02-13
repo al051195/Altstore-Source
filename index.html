@@ -5,740 +5,867 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AL051195 · AltStore</title>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Display:wght@400;500;700;900&family=Google+Sans+Text:wght@400;500;700&display=swap" rel="stylesheet">
+
 <style>
-/* =========================
-   NDOT-47 FONT IMPORT
-========================= */
-@font-face {
-    font-family: 'NDot-47';
-    src: url('ndot-47.woff2') format('woff2'),
-         url('ndot-47.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-
-/* =========================
-   NOTHING OS VARIABLES
-========================= */
 :root {
-    --nos-bg: #000000;
-    --nos-surface: #0D0D0D;
-    --nos-widget: #1A1A1A;
-    --nos-border: #2A2A2A;
-    --nos-text: #FFFFFF;
-    --nos-text-dim: #666666;
-    --nos-text-subtle: #404040;
-    --nos-red: #FF3B30;
-    --nos-dot: rgba(255, 255, 255, 0.06);
-    
-    --radius-widget: 28px;
-    --radius-small: 18px;
-    --gap: 8px;
+    --m3-pink: #FF4081;
+    --m3-purple: #B388FF;
+    --m3-deep-purple: #7C4DFF;
+    --m3-blue: #448AFF;
+    --m3-cyan: #00BCD4;
+    --m3-teal: #1DE9B6;
+    --m3-green: #00E676;
+    --m3-lime: #C6FF00;
+    --m3-yellow: #FFD600;
+    --m3-orange: #FF9100;
+    --m3-coral: #FF6E6E;
+    --surface: #FFFBFE;
+    --surface-dim: #F5F0F4;
+    --on-surface: #1C1B1F;
 }
 
-/* =========================
-   RESET
-========================= */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-html {
-    scroll-behavior: smooth;
-    -webkit-font-smoothing: antialiased;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
-    background: var(--nos-bg);
-    color: var(--nos-text);
-    line-height: 1.5;
+    font-family: 'Google Sans Text', sans-serif;
+    background: var(--surface);
+    color: var(--on-surface);
+    line-height: 1.6;
     overflow-x: hidden;
 }
 
-/* DOT MATRIX BACKGROUND */
-body::before {
-    content: '';
+.blob-bg {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: 
-        radial-gradient(circle, var(--nos-dot) 1px, transparent 1px);
-    background-size: 20px 20px;
     pointer-events: none;
     z-index: 0;
+    overflow: hidden;
 }
 
-/* =========================
-   NDOT TYPOGRAPHY
-========================= */
-.ndot {
-    font-family: 'NDot-47', monospace;
-    font-weight: normal;
-    letter-spacing: 0.05em;
+.blob {
+    position: absolute;
+    border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+    filter: blur(60px);
+    opacity: 0.3;
+    animation: morphBlob 20s ease-in-out infinite;
 }
 
-/* =========================
-   LAYOUT
-========================= */
+.blob-1 {
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, var(--m3-purple), var(--m3-pink));
+    top: -200px;
+    right: -200px;
+}
+
+.blob-2 {
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, var(--m3-cyan), var(--m3-blue));
+    bottom: -150px;
+    left: -150px;
+    animation-delay: 3s;
+}
+
+.blob-3 {
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, var(--m3-lime), var(--m3-green));
+    top: 40%;
+    left: 50%;
+    animation-delay: 6s;
+}
+
+@keyframes morphBlob {
+    0%, 100% {
+        border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+        transform: translate(0, 0) rotate(0deg);
+    }
+    25% {
+        border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+        transform: translate(20px, -30px) rotate(90deg);
+    }
+    50% {
+        border-radius: 30% 70% 50% 50% / 50% 60% 40% 60%;
+        transform: translate(-30px, 20px) rotate(180deg);
+    }
+    75% {
+        border-radius: 70% 30% 60% 40% / 40% 70% 50% 60%;
+        transform: translate(30px, 30px) rotate(270deg);
+    }
+}
+
 .container {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
-    padding: 40px 20px;
+    padding: 60px 32px;
     position: relative;
     z-index: 1;
 }
 
-/* =========================
-   WIDGET GRID SYSTEM
-========================= */
-.widget-grid {
+.hero {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: var(--gap);
-    margin-bottom: var(--gap);
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+    min-height: 70vh;
+    margin-bottom: 80px;
 }
 
-.widget {
-    background: var(--nos-widget);
-    border: 1px solid var(--nos-border);
-    border-radius: var(--radius-widget);
-    padding: 20px;
-    position: relative;
-    overflow: hidden;
-    backdrop-filter: blur(40px);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.widget:hover {
-    background: rgba(26, 26, 26, 0.8);
-    border-color: rgba(255, 255, 255, 0.1);
-    transform: translateY(-2px);
-}
-
-.widget-header {
-    font-family: 'NDot-47', monospace;
-    font-size: 0.75rem;
-    color: var(--nos-text-dim);
+.hero-eyebrow {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--m3-pink), var(--m3-orange));
+    color: white;
+    padding: 12px 24px;
+    border-radius: 100px;
+    font-size: 0.875rem;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    margin-bottom: 12px;
-}
-
-.widget-title {
-    font-family: 'NDot-47', monospace;
-    font-size: 1.8rem;
-    color: var(--nos-text);
-    line-height: 1;
-    margin-bottom: 8px;
-}
-
-.widget-subtitle {
-    font-size: 0.9rem;
-    color: var(--nos-text-dim);
-    font-weight: 400;
-}
-
-/* Widget sizes */
-.w-1 { grid-column: span 1; }
-.w-2 { grid-column: span 2; }
-.w-3 { grid-column: span 3; }
-.w-4 { grid-column: span 4; }
-
-.h-1 { min-height: 140px; }
-.h-2 { min-height: 288px; }
-.h-3 { min-height: 436px; }
-
-/* =========================
-   HERO WIDGET
-========================= */
-.hero-widget {
-    background: var(--nos-surface);
-    border: 1px solid var(--nos-border);
-    border-radius: var(--radius-widget);
-    padding: 60px 40px;
-    text-align: center;
-    margin-bottom: var(--gap);
-    position: relative;
-    overflow: hidden;
-}
-
-.hero-widget::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(
-        circle at 50% 50%,
-        rgba(255, 59, 48, 0.05) 0%,
-        transparent 60%
-    );
-    pointer-events: none;
+    margin-bottom: 24px;
+    box-shadow: 0 8px 24px rgba(255, 64, 129, 0.3);
 }
 
 .hero-title {
-    font-family: 'NDot-47', monospace;
-    font-size: clamp(2.5rem, 8vw, 5rem);
-    color: var(--nos-text);
-    line-height: 1.1;
-    margin-bottom: 16px;
-    letter-spacing: 0.05em;
+    font-family: 'Google Sans Display', sans-serif;
+    font-size: clamp(3.5rem, 10vw, 7rem);
+    font-weight: 900;
+    line-height: 0.95;
+    background: linear-gradient(135deg, var(--m3-deep-purple), var(--m3-pink), var(--m3-orange));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 24px;
 }
 
 .hero-subtitle {
-    font-size: 1rem;
-    color: var(--nos-text-dim);
-    font-weight: 400;
+    font-size: 1.5rem;
+    color: var(--on-surface);
+    line-height: 1.4;
+    margin-bottom: 40px;
 }
 
-/* =========================
-   INSTALLATION WIDGET
-========================= */
-.install-widget {
-    background: var(--nos-widget);
-    border: 1px solid var(--nos-border);
-    border-radius: var(--radius-widget);
-    padding: 0;
-    overflow: hidden;
+.hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 20px 40px;
+    background: linear-gradient(135deg, var(--m3-purple), var(--m3-pink));
+    color: white;
+    border-radius: 100px;
+    font-family: 'Google Sans', sans-serif;
+    font-size: 1.125rem;
+    font-weight: 700;
+    text-decoration: none;
+    box-shadow: 0 12px 40px rgba(179, 136, 255, 0.4);
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.install-header {
-    padding: 24px;
-    border-bottom: 1px solid var(--nos-border);
+.hero-cta:hover {
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 20px 60px rgba(179, 136, 255, 0.5);
 }
 
-.install-steps {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1px;
-    background: var(--nos-border);
-}
-
-.install-step {
-    background: var(--nos-surface);
-    padding: 24px;
+.hero-visual {
     position: relative;
-    transition: background 0.3s ease;
+    height: 500px;
 }
 
-.install-step:hover {
-    background: var(--nos-widget);
-}
-
-.step-number {
-    font-family: 'NDot-47', monospace;
-    font-size: 2.5rem;
-    color: rgba(255, 255, 255, 0.05);
+.floating-shape {
     position: absolute;
-    top: 16px;
-    right: 16px;
+    border-radius: 40% 60% 50% 50% / 60% 40% 60% 40%;
+    animation: floatShape 8s ease-in-out infinite;
 }
+
+.shape-1 {
+    width: 300px;
+    height: 300px;
+    top: 0;
+    right: 0;
+    background: linear-gradient(135deg, var(--m3-purple), var(--m3-pink));
+}
+
+.shape-2 {
+    width: 200px;
+    height: 200px;
+    bottom: 50px;
+    left: 50px;
+    background: linear-gradient(135deg, var(--m3-lime), var(--m3-green));
+    animation-delay: 1s;
+}
+
+.shape-3 {
+    width: 150px;
+    height: 150px;
+    top: 100px;
+    left: 0;
+    background: linear-gradient(135deg, var(--m3-orange), var(--m3-coral));
+    animation-delay: 2s;
+}
+
+@keyframes floatShape {
+    0%, 100% {
+        transform: translateY(0) rotate(0deg);
+        border-radius: 40% 60% 50% 50% / 60% 40% 60% 40%;
+    }
+    25% {
+        transform: translateY(-20px) rotate(90deg);
+        border-radius: 60% 40% 60% 40% / 40% 60% 50% 50%;
+    }
+    50% {
+        transform: translateY(0) rotate(180deg);
+        border-radius: 50% 50% 40% 60% / 50% 50% 60% 40%;
+    }
+    75% {
+        transform: translateY(-20px) rotate(270deg);
+        border-radius: 40% 60% 50% 50% / 60% 40% 60% 40%;
+    }
+}
+.section-header {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.section-label {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--m3-blue), var(--m3-cyan));
+    color: white;
+    padding: 8px 20px;
+    border-radius: 100px;
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 16px;
+}
+
+.section-title {
+    font-family: 'Google Sans Display', sans-serif;
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--m3-blue), var(--m3-cyan), var(--m3-teal));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 16px;
+}
+
+.section-desc {
+    font-size: 1.25rem;
+    color: var(--on-surface);
+    opacity: 0.8;
+}
+
+.steps-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    margin-bottom: 40px;
+}
+
+.step-bubble {
+    background: white;
+    border-radius: 48px;
+    padding: 40px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.step-bubble::before {
+    content: '';
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    opacity: 0.1;
+    top: -50px;
+    right: -50px;
+    transition: all 0.5s ease;
+}
+
+.step-bubble:nth-child(1)::before { background: linear-gradient(135deg, var(--m3-purple), var(--m3-pink)); }
+.step-bubble:nth-child(2)::before { background: linear-gradient(135deg, var(--m3-blue), var(--m3-cyan)); }
+.step-bubble:nth-child(3)::before { background: linear-gradient(135deg, var(--m3-green), var(--m3-lime)); }
+.step-bubble:nth-child(4)::before { background: linear-gradient(135deg, var(--m3-orange), var(--m3-coral)); }
+
+.step-bubble:hover {
+    transform: translateY(-8px) rotate(-1deg);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.12);
+}
+
+.step-bubble:hover::before {
+    opacity: 0.2;
+    transform: scale(1.2);
+}
+
+.step-num {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Google Sans Display', sans-serif;
+    font-size: 2rem;
+    font-weight: 900;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    color: white;
+}
+
+.step-bubble:nth-child(1) .step-num { background: linear-gradient(135deg, var(--m3-purple), var(--m3-pink)); }
+.step-bubble:nth-child(2) .step-num { background: linear-gradient(135deg, var(--m3-blue), var(--m3-cyan)); }
+.step-bubble:nth-child(3) .step-num { background: linear-gradient(135deg, var(--m3-green), var(--m3-lime)); color: var(--on-surface); }
+.step-bubble:nth-child(4) .step-num { background: linear-gradient(135deg, var(--m3-orange), var(--m3-coral)); }
 
 .step-title {
-    font-size: 0.85rem;
-    font-weight: 600;
-    margin-bottom: 8px;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
+    font-family: 'Google Sans', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 12px;
 }
 
-.step-desc {
-    font-size: 0.8rem;
-    color: var(--nos-text-dim);
+.step-text {
+    font-size: 1rem;
+    opacity: 0.8;
     line-height: 1.6;
 }
 
-.url-section {
-    background: var(--nos-surface);
-    padding: 24px;
-    border-top: 2px solid var(--nos-red);
+.url-mega-card {
+    background: linear-gradient(135deg, var(--m3-deep-purple), var(--m3-purple), var(--m3-pink));
+    border-radius: 48px;
+    padding: 60px;
+    position: relative;
+    overflow: hidden;
+}
+
+.url-mega-card::before {
+    content: '';
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.2), transparent);
+    border-radius: 50%;
+    top: -100px;
+    right: -100px;
+    animation: pulse 4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.2; }
+    50% { transform: scale(1.1); opacity: 0.3; }
 }
 
 .url-label {
-    font-family: 'NDot-47', monospace;
-    font-size: 0.7rem;
-    color: var(--nos-red);
+    font-size: 1rem;
+    font-weight: 700;
+    color: white;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    margin-bottom: 12px;
+    margin-bottom: 20px;
     display: block;
+    opacity: 0.9;
 }
 
-.url-code {
-    font-family: 'NDot-47', monospace;
-    font-size: 0.9rem;
-    color: var(--nos-text);
-    background: rgba(255, 255, 255, 0.03);
-    padding: 16px;
-    border-radius: var(--radius-small);
-    border: 1px solid var(--nos-border);
+.url-display {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 24px 32px;
+    border-radius: 100px;
+    font-family: 'Courier New', monospace;
+    font-size: 1.125rem;
+    text-align: center;
+    font-weight: 600;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
     user-select: all;
-    overflow-x: auto;
-    white-space: nowrap;
+    transition: all 0.3s ease;
 }
 
-/* =========================
-   APP CARD WIDGET
-========================= */
-.app-widget {
-    background: var(--nos-widget);
-    border: 1px solid var(--nos-border);
-    border-radius: var(--radius-widget);
+.url-display:hover {
+    transform: scale(1.02);
+    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.3);
+}
+
+.app-section { margin-bottom: 100px; }
+
+.app-mega-container {
+    background: white;
+    border-radius: 60px;
+    overflow: hidden;
+    box-shadow: 0 16px 64px rgba(0, 0, 0, 0.1);
+}
+
+.app-header-asymmetric {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    background: linear-gradient(135deg, var(--m3-teal), var(--m3-green), var(--m3-lime));
+    padding: 60px;
+    gap: 60px;
+    align-items: center;
+    position: relative;
     overflow: hidden;
 }
 
-.app-header-section {
-    padding: 32px;
-    border-bottom: 1px solid var(--nos-border);
-    display: flex;
-    gap: 24px;
-    align-items: flex-start;
+.app-header-asymmetric::before {
+    content: '';
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.2), transparent);
+    border-radius: 40% 60% 70% 30% / 50% 60% 40% 50%;
+    top: -150px;
+    right: -150px;
+    animation: morphBlob 15s ease-in-out infinite;
 }
 
-.app-icon-wrapper {
-    flex-shrink: 0;
-    width: 80px;
-    height: 80px;
-    border-radius: 20px;
+.app-icon-mega {
+    width: 180px;
+    height: 180px;
+    border-radius: 44px;
     overflow: hidden;
-    border: 1px solid var(--nos-border);
-    background: var(--nos-surface);
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.4);
+    position: relative;
+    z-index: 1;
 }
 
-.app-icon-wrapper img {
+.app-icon-mega img {
     width: 100%;
     height: 100%;
-    display: block;
     object-fit: cover;
 }
 
-.app-info {
-    flex: 1;
-}
-
-.app-name {
-    font-family: 'NDot-47', monospace;
-    font-size: 1.6rem;
-    margin-bottom: 8px;
-    letter-spacing: 0.02em;
-}
-
-.app-desc {
-    font-size: 0.9rem;
-    color: var(--nos-text-dim);
+.app-title {
+    font-family: 'Google Sans Display', sans-serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 900;
+    color: white;
+    line-height: 1.1;
     margin-bottom: 16px;
+    text-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 1;
+}
+
+.app-subtitle {
+    font-size: 1.25rem;
+    color: rgba(255, 255, 255, 0.95);
     line-height: 1.6;
+    margin-bottom: 32px;
+    position: relative;
+    z-index: 1;
 }
 
-.app-meta {
+.app-pill-badges {
     display: flex;
-    gap: 24px;
+    gap: 16px;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
 }
 
-.meta-item {
+.pill-badge {
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+    padding: 12px 24px;
+    border-radius: 100px;
+    font-weight: 700;
+    color: white;
+    font-size: 0.9rem;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+}
+
+.screenshot-explosion {
+    padding: 60px;
+    background: linear-gradient(180deg, white, var(--surface-dim));
+}
+
+.screenshots-masonry {
     display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.meta-label {
-    font-size: 0.7rem;
-    color: var(--nos-text-subtle);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
-.meta-value {
-    font-family: 'NDot-47', monospace;
-    font-size: 0.95rem;
-    color: var(--nos-text);
-}
-
-/* =========================
-   SCREENSHOT GALLERY
-========================= */
-.screenshot-section {
-    padding: 0;
-    background: var(--nos-surface);
-}
-
-.screenshot-scroll {
-    display: flex;
-    gap: 8px;
-    padding: 24px;
+    gap: 20px;
     overflow-x: auto;
-    overflow-y: hidden;
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
+    padding-bottom: 20px;
 }
 
-.screenshot-scroll::-webkit-scrollbar {
-    display: none;
-}
+.screenshots-masonry::-webkit-scrollbar { height: 12px; }
+.screenshots-masonry::-webkit-scrollbar-track { background: var(--surface-dim); border-radius: 100px; }
+.screenshots-masonry::-webkit-scrollbar-thumb { background: linear-gradient(90deg, var(--m3-purple), var(--m3-pink)); border-radius: 100px; }
 
-.screenshot-item {
+.screenshot-card {
     flex-shrink: 0;
     position: relative;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.screenshot-item img {
-    height: 400px;
+.screenshot-card:hover {
+    transform: translateY(-12px) rotate(-2deg);
+}
+
+.screenshot-card img {
+    height: 500px;
     width: auto;
-    display: block;
-    border-radius: 16px;
-    border: 1px solid var(--nos-border);
+    border-radius: 32px;
+    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.15);
 }
 
-.screenshot-badge {
+.screenshot-card:hover img {
+    box-shadow: 0 20px 80px rgba(0, 0, 0, 0.25);
+}
+
+.screenshot-num {
     position: absolute;
-    top: 8px;
-    left: 8px;
-    background: var(--nos-red);
-    color: #000;
-    font-family: 'NDot-47', monospace;
-    font-size: 0.65rem;
-    padding: 4px 8px;
-    border-radius: 6px;
-    font-weight: bold;
+    top: 16px;
+    left: 16px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Google Sans Display', sans-serif;
+    font-weight: 900;
+    font-size: 1.125rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
-
-/* =========================
-   INFO WIDGETS
-========================= */
-.info-grid {
+   
+.info-organic-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: var(--gap);
-    margin-bottom: var(--gap);
+    gap: 32px;
+    margin-bottom: 100px;
 }
 
-.info-widget {
-    background: var(--nos-widget);
-    border: 1px solid var(--nos-border);
-    border-radius: var(--radius-widget);
-    padding: 24px;
-    min-height: 160px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    transition: all 0.3s ease;
+.info-blob-card {
+    background: white;
+    border-radius: 48px;
+    padding: 48px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.info-widget:hover {
-    background: rgba(26, 26, 26, 0.8);
-    border-color: rgba(255, 255, 255, 0.1);
+.info-blob-card::before {
+    content: '';
+    position: absolute;
+    width: 250px;
+    height: 250px;
+    border-radius: 40% 60% 50% 50% / 60% 40% 60% 40%;
+    opacity: 0.08;
+    top: -50px;
+    right: -50px;
+    transition: all 0.5s ease;
 }
 
-.info-icon {
-    font-size: 1.5rem;
+.info-blob-card:nth-child(1)::before { background: linear-gradient(135deg, var(--m3-purple), var(--m3-pink)); }
+.info-blob-card:nth-child(2)::before { background: linear-gradient(135deg, var(--m3-blue), var(--m3-cyan)); }
+.info-blob-card:nth-child(3)::before { background: linear-gradient(135deg, var(--m3-orange), var(--m3-coral)); }
+
+.info-blob-card:hover {
+    transform: translateY(-12px) scale(1.02);
+    box-shadow: 0 20px 64px rgba(0, 0, 0, 0.12);
+}
+
+.info-blob-card:hover::before {
+    opacity: 0.15;
+    transform: scale(1.1) rotate(45deg);
+}
+
+.info-emoji {
+    font-size: 4rem;
+    margin-bottom: 24px;
+    display: block;
+}
+
+.info-card-title {
+    font-family: 'Google Sans Display', sans-serif;
+    font-size: 1.75rem;
+    font-weight: 700;
     margin-bottom: 16px;
 }
 
-.info-title {
-    font-size: 0.85rem;
+.info-card-text {
+    font-size: 1.125rem;
+    opacity: 0.8;
+    line-height: 1.7;
+}
+
+.info-card-text code {
+    background: var(--surface-dim);
+    padding: 4px 12px;
+    border-radius: 8px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.95rem;
+    color: var(--m3-deep-purple);
     font-weight: 600;
-    margin-bottom: 8px;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
 }
 
-.info-text {
-    font-size: 0.8rem;
-    color: var(--nos-text-dim);
-    line-height: 1.6;
-}
-
-.info-text code {
-    font-family: 'NDot-47', monospace;
-    background: rgba(255, 255, 255, 0.05);
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-size: 0.75rem;
-    color: var(--nos-red);
-}
-
-/* =========================
-   CONTACT WIDGET
-========================= */
-.contact-widget {
-    background: var(--nos-widget);
-    border: 1px solid var(--nos-border);
-    border-radius: var(--radius-widget);
-    padding: 40px;
+.contact-explosion {
+    background: linear-gradient(135deg, var(--m3-coral), var(--m3-pink), var(--m3-purple));
+    border-radius: 60px;
+    padding: 100px 60px;
     text-align: center;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 60px;
 }
 
-.contact-title {
-    font-family: 'NDot-47', monospace;
-    font-size: 2rem;
-    margin-bottom: 24px;
-    letter-spacing: 0.05em;
+.contact-explosion::before,
+.contact-explosion::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.2), transparent);
+    animation: floatBlob 10s ease-in-out infinite;
 }
 
-.contact-button {
+.contact-explosion::before {
+    width: 400px;
+    height: 400px;
+    top: -100px;
+    left: -100px;
+}
+
+.contact-explosion::after {
+    width: 300px;
+    height: 300px;
+    bottom: -80px;
+    right: -80px;
+    animation-delay: 2s;
+}
+
+@keyframes floatBlob {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(30px, -30px); }
+}
+
+.contact-title-mega {
+    font-family: 'Google Sans Display', sans-serif;
+    font-size: clamp(3rem, 7vw, 5.5rem);
+    font-weight: 900;
+    color: white;
+    line-height: 1;
+    margin-bottom: 32px;
+    position: relative;
+    z-index: 1;
+}
+
+.contact-button-mega {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 16px 32px;
-    background: var(--nos-surface);
-    border: 1px solid var(--nos-border);
+    gap: 16px;
+    padding: 24px 48px;
+    background: white;
+    color: var(--on-surface);
     border-radius: 100px;
-    color: var(--nos-text);
+    font-family: 'Google Sans', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
     text-decoration: none;
-    font-size: 0.9rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    transition: all 0.3s ease;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3);
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    z-index: 1;
 }
 
-.contact-button:hover {
-    background: var(--nos-red);
-    border-color: var(--nos-red);
-    color: #000;
-    transform: translateY(-2px);
+.contact-button-mega:hover {
+    transform: translateY(-8px) scale(1.1);
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.4);
 }
 
-/* =========================
-   FOOTER
-========================= */
+.arrow-icon {
+    font-size: 1.5rem;
+    transition: transform 0.3s ease;
+}
+
+.contact-button-mega:hover .arrow-icon {
+    transform: translateX(8px);
+}
+
 .footer {
     text-align: center;
-    padding: 40px 20px;
-    font-family: 'NDot-47', monospace;
-    font-size: 0.7rem;
-    color: var(--nos-text-subtle);
-    letter-spacing: 0.1em;
+    padding: 60px 32px;
+    opacity: 0.6;
 }
 
-.footer-dots {
-    margin-bottom: 16px;
-    font-size: 1rem;
-    opacity: 0.2;
+.footer-blobs {
+    font-size: 2rem;
+    margin-bottom: 20px;
 }
 
-/* =========================
-   RESPONSIVE
-========================= */
 @media (max-width: 1024px) {
-    .widget-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .w-3, .w-4 {
-        grid-column: span 2;
-    }
-    
-    .info-grid {
-        grid-template-columns: 1fr;
-    }
+    .hero, .app-header-asymmetric { grid-template-columns: 1fr; }
+    .steps-container { grid-template-columns: 1fr; }
+    .info-organic-grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 768px) {
-    .container {
-        padding: 20px 16px;
-    }
-    
-    .widget-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .w-1, .w-2, .w-3, .w-4 {
-        grid-column: span 1;
-    }
-    
-    .install-steps {
-        grid-template-columns: 1fr;
-    }
-    
-    .app-header-section {
-        flex-direction: column;
-    }
-    
-    .screenshot-item img {
-        height: 300px;
-    }
-    
-    .hero-widget {
-        padding: 40px 24px;
-    }
+    .screenshot-card img { height: 400px; }
 }
 
-/* =========================
-   ACCESSIBILITY
-========================= */
 @media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
+    *, *::before, *::after {
         animation-duration: 0.01ms !important;
         transition-duration: 0.01ms !important;
     }
 }
 </style>
 </head>
-
 <body>
+
+<div class="blob-bg">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+</div>
 
 <div class="container">
 
-    <!-- HERO WIDGET -->
-    <div class="hero-widget">
-        <h1 class="hero-title ndot">AL051195<br>ALTSTORE</h1>
-        <p class="hero-subtitle">iOS Application Repository</p>
-    </div>
+    <section class="hero">
+        <div class="hero-content">
+            <span class="hero-eyebrow">iOS Repository</span>
+            <h1 class="hero-title">AL051195<br>AltStore</h1>
+            <p class="hero-subtitle">Your gateway to amazing iOS applications, beautifully curated and always up-to-date.</p>
+            <a href="#install" class="hero-cta"><span>Get Started</span><span>→</span></a>
+        </div>
+        <div class="hero-visual">
+            <div class="floating-shape shape-1"></div>
+            <div class="floating-shape shape-2"></div>
+            <div class="floating-shape shape-3"></div>
+        </div>
+    </section>
 
-    <!-- INSTALLATION WIDGET -->
-    <div class="install-widget">
-        <div class="install-header">
-            <div class="widget-header">Setup</div>
-            <h2 class="widget-title ndot">Installation</h2>
-            <p class="widget-subtitle">Add source to AltStore</p>
+    <section id="install">
+        <div class="section-header">
+            <span class="section-label">Quick Setup</span>
+            <h2 class="section-title">Installation</h2>
+            <p class="section-desc">Add this source in just 4 easy steps</p>
         </div>
         
-        <div class="install-steps">
-            <div class="install-step">
-                <div class="step-number ndot">01</div>
+        <div class="steps-container">
+            <div class="step-bubble">
+                <div class="step-num">1</div>
                 <h3 class="step-title">Launch AltStore</h3>
-                <p class="step-desc">Open AltStore on your device</p>
+                <p class="step-text">Open the AltStore application on your iOS device</p>
             </div>
-            
-            <div class="install-step">
-                <div class="step-number ndot">02</div>
-                <h3 class="step-title">Navigate Sources</h3>
-                <p class="step-desc">Access the Sources tab</p>
+            <div class="step-bubble">
+                <div class="step-num">2</div>
+                <h3 class="step-title">Find Sources</h3>
+                <p class="step-text">Navigate to the Sources tab in the bottom navigation</p>
             </div>
-            
-            <div class="install-step">
-                <div class="step-number ndot">03</div>
+            <div class="step-bubble">
+                <div class="step-num">3</div>
                 <h3 class="step-title">Add Source</h3>
-                <p class="step-desc">Tap the + button</p>
+                <p class="step-text">Tap the + button in the top-right corner</p>
+            </div>
+            <div class="step-bubble">
+                <div class="step-num">4</div>
+                <h3 class="step-title">Paste URL</h3>
+                <p class="step-text">Enter the repository URL when prompted</p>
+            </div>
+        </div>
+        
+        <div class="url-mega-card">
+            <span class="url-label">Repository URL</span>
+            <div class="url-display">https://al051195.github.io/altstore/ClassicSource.json</div>
+        </div>
+    </section>
+
+    <section class="app-section">
+        <div class="section-header">
+            <span class="section-label">Featured App</span>
+            <h2 class="section-title">SkyWizard</h2>
+        </div>
+        
+        <div class="app-mega-container">
+            <div class="app-header-asymmetric">
+                <div class="app-icon-mega">
+                    <img src="https://raw.githubusercontent.com/al051195/SkyWizard-SwiftUI-Liquid-Glass/master/SkyWizard-SwiftUI/Other/Assets.xcassets/Weather-Preview.imageset/Weather-iOS-Default-1024x1024@1x.png" alt="SkyWizard">
+                </div>
+                <div>
+                    <h3 class="app-title">SkyWizard</h3>
+                    <p class="app-subtitle">A stunning weather application featuring Liquid Glass design with real-time meteorological data and beautiful visuals.</p>
+                    <div class="app-pill-badges">
+                        <div class="pill-badge">Version 2.2</div>
+                        <div class="pill-badge">iOS 26.0+</div>
+                        <div class="pill-badge">Active</div>
+                    </div>
+                </div>
             </div>
             
-            <div class="install-step">
-                <div class="step-number ndot">04</div>
-                <h3 class="step-title">Input URL</h3>
-                <p class="step-desc">Paste repository URL</p>
-            </div>
-        </div>
-        
-        <div class="url-section">
-            <span class="url-label ndot">Repository URL</span>
-            <div class="url-code ndot">https://al051195.github.io/altstore/ClassicSource.json</div>
-        </div>
-    </div>
-
-    <!-- APP WIDGET -->
-    <div class="app-widget">
-        <div class="app-header-section">
-            <div class="app-icon-wrapper">
-                <img src="https://raw.githubusercontent.com/al051195/SkyWizard-SwiftUI-Liquid-Glass/master/SkyWizard-SwiftUI/Other/Assets.xcassets/Weather-Preview.imageset/Weather-iOS-Default-1024x1024@1x.png"
-                     alt="SkyWizard">
-            </div>
-            
-            <div class="app-info">
-                <h3 class="app-name ndot">SKYWIZARD</h3>
-                <p class="app-desc">Modern weather application featuring Liquid Glass design language with real-time meteorological data.</p>
-                
-                <div class="app-meta">
-                    <div class="meta-item">
-                        <span class="meta-label">Version</span>
-                        <span class="meta-value ndot">2.2</span>
+            <div class="screenshot-explosion">
+                <div class="screenshots-masonry">
+                    <div class="screenshot-card">
+                        <div class="screenshot-num">1</div>
+                        <img src="https://raw.githubusercontent.com/al051195/SkyWizard-SwiftUI-Liquid-Glass/refs/heads/master/banners/iphone1.png" alt="1">
                     </div>
-                    <div class="meta-item">
-                        <span class="meta-label">Min iOS</span>
-                        <span class="meta-value ndot">26.0</span>
+                    <div class="screenshot-card">
+                        <div class="screenshot-num">2</div>
+                        <img src="https://raw.githubusercontent.com/al051195/SkyWizard-SwiftUI-Liquid-Glass/refs/heads/master/banners/iphone2.png" alt="2">
                     </div>
-                    <div class="meta-item">
-                        <span class="meta-label">Status</span>
-                        <span class="meta-value ndot">ACTIVE</span>
+                    <div class="screenshot-card">
+                        <div class="screenshot-num">3</div>
+                        <img src="https://raw.githubusercontent.com/al051195/SkyWizard-SwiftUI-Liquid-Glass/refs/heads/master/banners/iphone3.png" alt="3">
+                    </div>
+                    <div class="screenshot-card">
+                        <div class="screenshot-num">4</div>
+                        <img src="https://raw.githubusercontent.com/al051195/SkyWizard-SwiftUI-Liquid-Glass/refs/heads/master/banners/iphone4.png" alt="4">
+                    </div>
+                    <div class="screenshot-card">
+                        <div class="screenshot-num">5</div>
+                        <img src="https://raw.githubusercontent.com/al051195/SkyWizard-SwiftUI-Liquid-Glass/refs/heads/master/banners/iphone5.png" alt="5">
+                    </div>
+                    <div class="screenshot-card">
+                        <div class="screenshot-num">6</div>
+                        <img src="https://raw.githubusercontent.com/al051195/SkyWizard-SwiftUI-Liquid-Glass/refs/heads/master/banners/iphone6.png" alt="6">
+                    </div>
+                    <div class="screenshot-card">
+                        <div class="screenshot-num">7</div>
+                        <img src="https://raw.githubusercontent.com/al051195/SkyWizard-SwiftUI-Liquid-Glass/refs/heads/master/banners/iphone7.png" alt="7">
                     </div>
                 </div>
             </div>
         </div>
-        
-        <div class="screenshot-section">
-            <div class="screenshot-scroll">
-                <div class="screenshot-item">
-                    <div class="screenshot-badge ndot">01</div>
-                    <img src="https://raw.githubusercontent.com/al051195/SkyWizard-SwiftUI-Liquid-Glass/refs/heads/master/banners/iphone1.png" alt="Screenshot 1">
-                </div>
-                <div class="screenshot-item">
-                    <div class="screenshot-badge ndot">02</div>
-                    <img src="https://raw.githubusercontent.com/al051195/SkyWizard-SwiftUI-Liquid-Glass/refs/heads/master/banners/iphone2.png" alt="Screenshot 2">
-                </div>
-                <div class="screenshot-item">
-                    <div class="screenshot-badge ndot">03</div>
-                    <img src="https://raw.githubusercontent.com/al051195/SkyWizard-SwiftUI-Liquid-Glass/refs/heads/master/banners/iphone3.png" alt="Screenshot 3">
-                </div>
-                <div class="screenshot-item">
-                    <div class="screenshot-badge ndot">04</div>
-                    <img src="https://raw.githubusercontent.com/al051195/SkyWizard-SwiftUI-Liquid-Glass/refs/heads/master/banners/iphone4.png" alt="Screenshot 4">
-                </div>
-                <div class="screenshot-item">
-                    <div class="screenshot-badge ndot">05</div>
-                    <img src="https://raw.githubusercontent.com/al051195/SkyWizard-SwiftUI-Liquid-Glass/refs/heads/master/banners/iphone5.png" alt="Screenshot 5">
-                </div>
-                <div class="screenshot-item">
-                    <div class="screenshot-badge ndot">06</div>
-                    <img src="https://raw.githubusercontent.com/al051195/SkyWizard-SwiftUI-Liquid-Glass/refs/heads/master/banners/iphone6.png" alt="Screenshot 6">
-                </div>
-                <div class="screenshot-item">
-                    <div class="screenshot-badge ndot">07</div>
-                    <img src="https://raw.githubusercontent.com/al051195/SkyWizard-SwiftUI-Liquid-Glass/refs/heads/master/banners/iphone7.png" alt="Screenshot 7">
-                </div>
-            </div>
+    </section>
+
+    <div class="info-organic-grid">
+        <div class="info-blob-card">
+            <span class="info-emoji">⚡</span>
+            <h3 class="info-card-title">GitHub Hosted</h3>
+            <p class="info-card-text">All resources in <code>ClassicSource.json</code> are reliably hosted via GitHub Pages.</p>
+        </div>
+        <div class="info-blob-card">
+            <span class="info-emoji">🔄</span>
+            <h3 class="info-card-title">Auto Updates</h3>
+            <p class="info-card-text">Updates and new screenshots propagate automatically to everyone using this source.</p>
+        </div>
+        <div class="info-blob-card">
+            <span class="info-emoji">🔓</span>
+            <h3 class="info-card-title">Open Source</h3>
+            <p class="info-card-text">Complete source code available on GitHub. Contributions and feedback welcome!</p>
         </div>
     </div>
 
-    <!-- INFO GRID -->
-    <div class="info-grid">
-        <div class="info-widget">
-            <div>
-                <div class="info-icon">⚡</div>
-                <h3 class="info-title">GitHub Pages</h3>
-                <p class="info-text">All resources in <code>ClassicSource.json</code> hosted via GitHub Pages.</p>
-            </div>
-        </div>
-        
-        <div class="info-widget">
-            <div>
-                <div class="info-icon">🔄</div>
-                <h3 class="info-title">Auto Updates</h3>
-                <p class="info-text">Updates and changes propagate automatically to all users.</p>
-            </div>
-        </div>
-        
-        <div class="info-widget">
-            <div>
-                <div class="info-icon">🔒</div>
-                <h3 class="info-title">Open Source</h3>
-                <p class="info-text">Source code available on GitHub. Contributions welcome.</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- CONTACT WIDGET -->
-    <div class="contact-widget">
-        <h2 class="contact-title ndot">GET IN TOUCH</h2>
-        <a href="https://github.com/al051195" target="_blank" class="contact-button">
+    <section class="contact-explosion">
+        <h2 class="contact-title-mega">Let's Connect</h2>
+        <a href="https://github.com/al051195" target="_blank" class="contact-button-mega">
             <span>View on GitHub</span>
-            <span>→</span>
+            <span class="arrow-icon">→</span>
         </a>
-    </div>
+    </section>
 
-    <!-- FOOTER -->
-    <div class="footer">
-        <div class="footer-dots ndot">◯ ◯ ◯</div>
-        <p class="ndot">© 2026 AL051195 · ALTSTORE</p>
-    </div>
+    <footer class="footer">
+        <div class="footer-blobs">●●●</div>
+        <p>© 2026 AL051195 · AltStore Repository</p>
+    </footer>
 
 </div>
 
